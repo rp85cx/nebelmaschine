@@ -1,4 +1,4 @@
-# nebelmaschine
+# alte doku der nebelmaschine mit arduino uno
 Dokumentation für die reparierte, neu "verdrahtete" Nebelmaschine Stairville M-Fog 1500
 
 Source Code "fogm_buttoncntrl.ino" für Arduino Uno
