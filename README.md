@@ -1,7 +1,9 @@
-# V2 der bevorstehenden nochmals geupgradeden Nebelmaschine
-## dual core - warum nicht?
+# bevorstehendes V2 der geupgradeden Nebelmaschine
+### dual core - warum nicht?
 
+leider bis jetzt nur auf der Software Seite - keine Garantie für irgendwas
 
+Disclaimer: der Code wurde basically komplett ohne KI geschrieben, wenn nur kleines problem solving deswegen bitte nicht wundern wenn der unstrukturiert oder unklar wie sonst noch was ist :)
 
 
 
