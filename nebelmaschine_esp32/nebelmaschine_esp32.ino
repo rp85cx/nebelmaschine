@@ -1,5 +1,5 @@
 //Board library ESP32 by Espressif System <= 2.0.17 
-//foreshadowing: hier ist alles Denglisch, tut mir leid
+//ich hoffe du verstehst denglisch
 
 #include <U8g2lib.h>
 #include <RotaryEncoder.h>
