@@ -21,13 +21,13 @@ void setup() {
   initLibs();
   initPins();
 
+  setInitalState();
+
   xTaskCreatePinnedToCore(code0, "core0", 10000, NULL, 1, &core0, 0);
   delay(100);
 
   xTaskCreatePinnedToCore(code1, "core1", 10000, NULL, 1, &core1, 1);
   delay(100);
-
-  setInitalState();
 }
 
 
