@@ -2,12 +2,12 @@
 
 //-------helpers----------
 void heat(bool active) {
-  digitalWrite(relay_heatPin, active ? HIGH : LOW);
+  digitalWrite(relay_heatPin, !active ? HIGH : LOW); //inverted relay
   relay_heat = active;
 }
 
 void pump(bool active) {
-  digitalWrite(relay_pumpPin, active ? HIGH : LOW);
+  digitalWrite(relay_pumpPin, !active ? HIGH : LOW); //inverted relay
   relay_pump = active;
 }
 
@@ -275,15 +275,16 @@ void page_help() {
   u8g2.drawXBMP(3, 3, 58, 58, image_qr_code);
 
   u8g2.setFont(u8g2_font_t0_12_tr);
-  u8g2.drawStr(65, 12, "github.com");
+u8g2.drawStr(65, 10, "github.com");
 
-  u8g2.setFont(u8g2_font_4x6_tr);
-  u8g2.drawStr(69, 22, "scan for link");
+u8g2.drawStr(72, 53, "press to");
 
-  u8g2.setFont(u8g2_font_t0_12_tr);
-  u8g2.drawStr(72, 50, "press to");
+u8g2.drawStr(75, 63, "restart");
 
-  u8g2.drawStr(75, 62, "restart");
+u8g2.setFont(u8g2_font_t0_12b_tr);
+u8g2.drawStr(75, 27, "made by");
+
+u8g2.drawStr(84, 38, "Joni");
 }
 
 void drawScreen() {

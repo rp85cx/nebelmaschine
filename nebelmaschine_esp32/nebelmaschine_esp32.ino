@@ -1,6 +1,9 @@
-//Board library ESP32 by Espressif System <= 2.0.17 
-//ich hoffe du verstehst denglisch
+/*Board library ESP32 by Espressif System <= 2.0.17 
+ich hoffe du verstehst denglisch
 
+"kleines" Projekt um eine Nebelmaschine fast smart zu machen
+bis jetzt mein größtes Programm und bin eig ganz happy, dass das ohne ki enstanden ist
+*/
 #include <U8g2lib.h>
 #include <RotaryEncoder.h>
 #include <OneButton.h>

@@ -1,7 +1,7 @@
 //--------config-------------
 char menu_items[10][15] = {
   { "Manuell" },
-  { "Wifi" },
+  { "soon Wifi" },
   { "Timer" },
   { "Heat an/aus" },
   { "DMX Adresse" },
