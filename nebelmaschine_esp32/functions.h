@@ -2,12 +2,12 @@
 
 //-------helpers----------
 void heat(bool active) {
-  digitalWrite(relay_heatPin, !active ? HIGH : LOW); //inverted relay
+  digitalWrite(relay_heatPin, !active ? HIGH : LOW);  //inverted relay
   relay_heat = active;
 }
 
 void pump(bool active) {
-  digitalWrite(relay_pumpPin, !active ? HIGH : LOW); //inverted relay
+  digitalWrite(relay_pumpPin, !active ? HIGH : LOW);  //inverted relay
   relay_pump = active;
 }
 
@@ -31,8 +31,8 @@ void initLibs() {
 }
 
 void initPins() {
-  pinMode(fluidSensorPin, INPUT_PULLUP);
-  pinMode(triggerButton, INPUT_PULLUP);
+  pinMode(fluidSensorPin, INPUT_PULLDOWN);  // 5V----Z---GPIO
+  pinMode(triggerButton, INPUT_PULLUP);     // GND----Z---GPIO
   pinMode(relay_heatPin, OUTPUT);
   pinMode(relay_pumpPin, OUTPUT);
   pinMode(led_ready, OUTPUT);
@@ -97,7 +97,7 @@ void page_manuell() {
 
 void page_wifi() {
   u8g2.setFont(u8g2_font_t0_16_tr);
-  u8g2.drawStr(6, 39, "coming soon");
+  u8g2.drawStr(6, 39, "kommt noch...");
   //nach wifi chagen ESP.restart(); callen
 }
 
@@ -275,16 +275,16 @@ void page_help() {
   u8g2.drawXBMP(3, 3, 58, 58, image_qr_code);
 
   u8g2.setFont(u8g2_font_t0_12_tr);
-u8g2.drawStr(65, 10, "github.com");
+  u8g2.drawStr(65, 10, "github.com");
 
-u8g2.drawStr(72, 53, "press to");
+  u8g2.drawStr(72, 53, "press to");
 
-u8g2.drawStr(75, 63, "restart");
+  u8g2.drawStr(75, 63, "restart");
 
-u8g2.setFont(u8g2_font_t0_12b_tr);
-u8g2.drawStr(75, 27, "made by");
+  u8g2.setFont(u8g2_font_t0_12b_tr);
+  u8g2.drawStr(75, 27, "made by");
 
-u8g2.drawStr(84, 38, "Joni");
+  u8g2.drawStr(84, 38, "Joni");
 }
 
 void drawScreen() {
@@ -600,6 +600,8 @@ void dmxControl(bool wantsAction) {
     } else {
       foggingActiveDMX = false;
     }
+  } else {
+    foggingActiveDMX = false;
   }
 }
 
@@ -632,7 +634,7 @@ void checkInactivity() {
     lastAction = millis();
   }
 
-  if ((now - lastAction) >= (inactivityTime * 1000)) { //ich saß hier bestimmt nd eine stunde dran inverted und home in einen timer loop zu packen um zu merken das das totdumm ist hahaha
+  if ((now - lastAction) >= (inactivityTime * 1000)) {  //ich saß hier bestimmt nd eine stunde dran inverted und home in einen timer loop zu packen um zu merken das das totdumm ist hahaha
     if (!(current_screen == 1 && menu_selected == 7)) {
       current_screen = 1;
       menu_selected = 7;
