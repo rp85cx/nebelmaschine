@@ -11,15 +11,16 @@ char menu_items[10][15] = {
   { "Help" }
 };
 
-const int inactivityTime = 120;      //in sekunden ; -120-       invert time = inactivity time * 5
-const int tempCheckInterval = 500;  //in ms >200 ; -500-
-const int dmxUpdateInterval = 100;  //in ms -100-
+const int inactivityTime = 120;     //in s; -120-       invert time = inactivity time * 5
+const int tempCheckInterval = 500;  //in ms >200; -500-
+const int dmxUpdateInterval = 100;  //in ms; -100-
+const int maxFoggingTime = 2;       //in min; -2-
 
-const int led_dunkelPwm = 20;  //helligkeit von dunkler status led, 0-255, -20-
+const int led_dunkelPwm = 20;       //helligkeit von dunkler status led, 0-255; -20-
 
 const int foggingTimeOnDisplayPress = 500;  //wie lange (ms) foggen soll wenn in manuell page geklickt wurde -500-
 
-bool debugMode = false; //serial feedback active or not
+bool debugMode = false;            //serial feedback active oder nicht
 
 //-------pin declarations-------- 
 const int relay_heatPin = 19;
@@ -72,6 +73,7 @@ unsigned long lastDmxUpdate;
 unsigned long lastTimerUpdate;
 unsigned long lastTriggerButtonCheck;
 unsigned long lastHeatStateChange;
+unsigned long foggingTime;
 int lastLedControlState=6;;
 int ledControlState;
 bool buttonPressed = false;
@@ -95,6 +97,7 @@ bool foggingActiveButton = false;
 bool foggingActiveDMX = false;
 bool foggingActiveTimer = false;
 bool displayInverted=false;
+bool lastFoggingState;
 //bool timerActive = false;   // -> preferences
 //int timerOff = 60;   // -> preferences
 //int timerOn = 30;   // -> preferences

@@ -18,10 +18,9 @@ bis jetzt mein größtes Programm und bin eig ganz happy, dass das ohne ki ensta
 void setup() {
   if (debugMode) Serial.begin(115200);
 
-  initLibs();
   initPins();
-
   setInitalState();
+  initLibs();
 
   xTaskCreatePinnedToCore(code0, "core0", 10000, NULL, 1, &core0, 0);
   delay(100);

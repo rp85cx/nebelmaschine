@@ -42,8 +42,6 @@ void initPins() {
 
   ledcSetup(0, 5000, 12);
   ledcAttachPin(led_pwrHeat, 0);
-
-  if (debugMode) Serial.println("initialised");
 }
 
 void setInitalState() {
@@ -551,6 +549,15 @@ void systemControl() {
   if (foggingActiveDMX || foggingActiveButton || foggingActiveDisplay || foggingActiveTimer) {
     foggingActive = true;
   } else {
+    foggingActive = false;
+  }
+
+  if ((lastFoggingState != foggingActive) && foggingActive) { //sometimes simpler isnt better; hätte man safe schöner machen können aber so gehts auch
+    foggingTime = now;
+    lastFoggingState = foggingActive;
+  }
+
+  if ((now - foggingTime) >= maxFoggingTime) {
     foggingActive = false;
   }
 }
