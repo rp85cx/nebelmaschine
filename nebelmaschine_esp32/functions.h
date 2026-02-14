@@ -413,10 +413,10 @@ void pageFunctions() {
     } else {
       switch (edit_selected) {
         case 1:
-          preferences.putUInt("timerOff", getEncoderScroll(preferences.getUInt("timerOff", 1), 120, true));
+          preferences.putUInt("timerOff", getEncoderScroll(preferences.getUInt("timerOff", 1), 121, true));
           break;
         case 2:
-          preferences.putUInt("timerOn", getEncoderScroll(preferences.getUInt("timerOn", 1), 90, true));
+          preferences.putUInt("timerOn", getEncoderScroll(preferences.getUInt("timerOn", 1), 91, true));
           break;
       }
     }
@@ -474,7 +474,7 @@ void checkTemp(bool wantsAction) {
   unsigned long now = millis();
   if (((now - lastTempUpdate) >= tempCheckInterval)) {
     lastTempUpdate = now;
-    temperature = thermocouple.readCelsius();  //
+    temperature = thermocouple.readCelsius();
     if (wantsAction) {
       if (current_screen == 1 && (menu_selected == 7 || menu_selected == 3)) {
         action = true;

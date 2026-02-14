@@ -52,7 +52,7 @@ U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0);
 RotaryEncoder encoder(encoderA, encoderB, RotaryEncoder::LatchMode::FOUR3);
 OneButton encoderButton(encoderButtonPin, true, true);
 Preferences preferences;
-MAX6675 thermocouple(thermocoupleDO, thermocoupleCS, thermocoupleCLK);//
+MAX6675 thermocouple(thermocoupleCLK, thermocoupleCS, thermocoupleDO);//
 TaskHandle_t core0;
 TaskHandle_t core1;
 
