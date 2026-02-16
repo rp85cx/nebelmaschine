@@ -546,19 +546,27 @@ void systemControl() {
     }
   }
 
-  if (foggingActiveDMX || foggingActiveButton || foggingActiveDisplay || foggingActiveTimer) {
+  if ((foggingActiveDMX || foggingActiveButton || foggingActiveDisplay || foggingActiveTimer) && foggingAllowed) {
     foggingActive = true;
   } else {
     foggingActive = false;
   }
 
-  if ((lastFoggingState != foggingActive) && foggingActive) {  //sometimes simpler isnt better; hätte man safe schöner machen können aber so gehts auch
-    foggingTime = now;
+  if (lastFoggingState != foggingActive) {
     lastFoggingState = foggingActive;
+    foggingTime = now;
   }
 
-  if ((now - foggingTime) >= maxFoggingTime) {
-    foggingActive = false;
+  if (!foggingAllowed) {
+    if ((now - foggingTime) >= (maxFoggingTime * 1000)) {
+      foggingAllowed = true;
+    }
+  }
+
+  if (foggingActive) {
+    if ((now - foggingTime) >= (maxFoggingTime * 1000)) {
+      foggingAllowed = false;
+    }
   }
 }
 
@@ -659,6 +667,6 @@ void checkInactivity() {
   }
 }
 
-void dmxInPrefs(){
-  dmxActive  = preferences.getBool("dmxActive", true);
+void dmxInPrefs() {
+  dmxActive = preferences.getBool("dmxActive", true);
 }
