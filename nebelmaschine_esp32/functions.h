@@ -87,7 +87,7 @@ void page_manuell() {
 
   if (ready) {
     u8g2.drawRFrame(78, 25, 18, 18, 3);
-    if (foggingActiveDisplay) {
+    if (foggingActive) {
       u8g2.drawRBox(80, 27, 14, 14, 3);
     }
   }
@@ -552,7 +552,7 @@ void systemControl() {
     foggingActive = false;
   }
 
-  if ((lastFoggingState != foggingActive) && foggingActive) { //sometimes simpler isnt better; hätte man safe schöner machen können aber so gehts auch
+  if ((lastFoggingState != foggingActive) && foggingActive) {  //sometimes simpler isnt better; hätte man safe schöner machen können aber so gehts auch
     foggingTime = now;
     lastFoggingState = foggingActive;
   }
@@ -563,7 +563,7 @@ void systemControl() {
 }
 
 void dmxControl(bool wantsAction) {
-  if (preferences.getBool("dmxActive", true)) {
+  if (dmxActive) {
     dmx_packet_t packet;
     if (dmx_receive(1, &packet, DMX_TIMEOUT_TICK)) {
       if (!packet.err) {
@@ -590,22 +590,23 @@ void dmxControl(bool wantsAction) {
           dmx_read(1, dmxData, packet.size);
           dmxValue = dmxData[preferences.getUInt("dmxAdress", 1)];
         }
+
+        if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1) == 1)) && dmxValue >= 127) {
+          foggingActiveDMX = true;
+          action = true;
+        } else if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1)) == 2) && dmxValue >= 127) {
+          preferences.putBool("timerActive", true);
+          action = true;
+        } else if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1)) == 2) && dmxValue < 127) {
+          preferences.putBool("timerActive", false);
+          action = true;
+        } else {
+          foggingActiveDMX = false;
+        }
       } else {
         //dmx error
         if (debugMode) Serial.println("dmx error occurred");
       }
-    }
-    if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1) == 1)) && dmxValue >= 127) {
-      foggingActiveDMX = true;
-      action = true;
-    } else if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1)) == 2) && dmxValue >= 127) {
-      preferences.putBool("timerActive", true);
-      action = true;
-    } else if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1)) == 2) && dmxValue < 127) {
-      preferences.putBool("timerActive", false);
-      action = true;
-    } else {
-      foggingActiveDMX = false;
     }
   } else {
     foggingActiveDMX = false;
@@ -656,4 +657,8 @@ void checkInactivity() {
     displayInverted = !displayInverted;
     action = true;
   }
+}
+
+void dmxInPrefs(){
+  dmxActive  = preferences.getBool("dmxActive", true);
 }

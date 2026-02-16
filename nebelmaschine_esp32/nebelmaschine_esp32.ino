@@ -53,6 +53,8 @@ void code0(void* pvParameters) {
     systemControl();
 
     timerControl();
+
+    dmxInPrefs();
   }
 }
 

@@ -20,7 +20,7 @@ const int led_dunkelPwm = 20;       //helligkeit von dunkler status led, 0-255; 
 
 const int foggingTimeOnDisplayPress = 500;  //wie lange (ms) foggen soll wenn in manuell page geklickt wurde -500-
 
-bool debugMode = false;            //serial feedback active oder nicht
+bool debugMode = true;            //serial feedback active oder nicht
 
 //-------pin declarations-------- 
 const int relay_heatPin = 19;
@@ -105,7 +105,7 @@ bool lastFoggingState;
 int temperature = 0;  //dev: = 200 prod: = 0
 //int dmxAdress = 1;   // -> preferences
 //int dmxMode = 1;  // -> preferences
-//bool dmxActive = true;  // -> preferences
+bool dmxActive = true;  // -> preferences für core0, local var für core1
 
 /*
 default core setup:
