@@ -523,7 +523,7 @@ void ledControl() {
 void systemControl() {
   unsigned long now = millis();
 
-  ready = ((temperature >= temp_ready) && preferences.getBool("heatActive", true)) ? true : false;
+  ready = ((temperature >= temp_ready) && (temperature < 1000)) ? true : false;
 
   if (((temperature <= temp_heatMax) || (relay_pump && temperature <= temp_pumpMax)) && preferences.getBool("heatActive", true) && temperature != 0) {
     if (now - lastHeatStateChange >= 2000) {
@@ -534,7 +534,7 @@ void systemControl() {
     heat(false);
   }
 
-  if (ready && foggingActive && preferences.getBool("heatActive", true)) pump(true);
+  if (ready && foggingActive) pump(true);
   else pump(false);
 
   if (now - lastTriggerButtonCheck >= 50) {
