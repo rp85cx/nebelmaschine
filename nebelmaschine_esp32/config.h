@@ -16,7 +16,7 @@ const int tempCheckInterval = 500;  //in ms >200; -500-
 const int dmxUpdateInterval = 100;  //in ms; -100-
 const int maxFoggingTime = 90;       //in s; -60-
 
-const int led_dunkelPwm = 10;       //helligkeit von dunkler status led, 0-255; -20-
+const int led_dunkelPwm = 8;       //helligkeit von dunkler status led, 0-255; -20-
 
 const int foggingTimeOnDisplayPress = 500;  //wie lange (ms) foggen soll wenn in manuell page geklickt wurde -500-
 
