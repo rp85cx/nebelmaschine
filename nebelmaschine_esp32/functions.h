@@ -31,8 +31,8 @@ void initLibs() {
 }
 
 void initPins() {
-  pinMode(fluidSensorPin, INPUT_PULLDOWN);  // 5V----Z---GPIO
-  pinMode(triggerButton, INPUT_PULLUP);     // GND----Z---GPIO
+  pinMode(fluidSensorPin, INPUT);
+  pinMode(triggerButton, INPUT);
   pinMode(relay_heatPin, OUTPUT);
   pinMode(relay_pumpPin, OUTPUT);
   pinMode(led_ready, OUTPUT);
@@ -539,12 +539,21 @@ void systemControl() {
 
   if (now - lastTriggerButtonCheck >= 50) {
     lastTriggerButtonCheck = now;
-    if (!digitalRead(triggerButton)) {
+    if (!digitalRead(triggerButton)) { //button is inverted
       foggingActiveButton = true;
-    } else if (digitalRead(triggerButton)) {
+    } else {
       foggingActiveButton = false;
     }
   }
+  /*
+  Serial.printf("dmx:%d | button:%d | display:%d | timer:%d | allowed:%d  |==> fogs:%d",  //troubleshooting help for trigger inputs
+                foggingActiveDMX,
+                foggingActiveButton,
+                foggingActiveDisplay,
+                foggingActiveTimer,
+                foggingAllowed,
+                foggingActive,
+  );*/
 
   if ((foggingActiveDMX || foggingActiveButton || foggingActiveDisplay || foggingActiveTimer) && foggingAllowed) {
     foggingActive = true;
@@ -557,13 +566,13 @@ void systemControl() {
     foggingTime = now;
   }
 
-  if (!foggingAllowed) {
-    if ((now - foggingTime) >= (maxFoggingTime * 1000)) {
+  if (!foggingAllowed) {  //allow fogging again after quarter timeout time has passed
+    if ((now - foggingTime) >= (maxFoggingTime * 1000 / 4)) {
       foggingAllowed = true;
     }
   }
 
-  if (foggingActive) {
+  if (foggingActive) {  //disallow fogging if on for more than timeout time
     if ((now - foggingTime) >= (maxFoggingTime * 1000)) {
       foggingAllowed = false;
     }

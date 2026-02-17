@@ -16,7 +16,7 @@ const int tempCheckInterval = 500;  //in ms >200; -500-
 const int dmxUpdateInterval = 100;  //in ms; -100-
 const int maxFoggingTime = 90;       //in s; -60-
 
-const int led_dunkelPwm = 20;       //helligkeit von dunkler status led, 0-255; -20-
+const int led_dunkelPwm = 10;       //helligkeit von dunkler status led, 0-255; -20-
 
 const int foggingTimeOnDisplayPress = 500;  //wie lange (ms) foggen soll wenn in manuell page geklickt wurde -500-
 
@@ -50,7 +50,7 @@ const float temp_pumpMax = 235.0;  //prod: -235-
 //----------program variables and class calls-----------------
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0);
 RotaryEncoder encoder(encoderA, encoderB, RotaryEncoder::LatchMode::FOUR3);
-OneButton encoderButton(encoderButtonPin, true, true);
+OneButton encoderButton(encoderButtonPin, true, false);
 Preferences preferences;
 MAX6675 thermocouple(thermocoupleCLK, thermocoupleCS, thermocoupleDO);//
 TaskHandle_t core0;
