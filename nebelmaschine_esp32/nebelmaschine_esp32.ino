@@ -1,5 +1,5 @@
 /*
-v2.2
+v3.0
 Board library ESP32 by Espressif System <= 2.0.17 
 ich hoffe du verstehst denglisch
 
@@ -11,6 +11,8 @@ ich hoffe du verstehst denglisch
 #include <Preferences.h>
 #include <max6675.h>
 #include <esp_dmx.h>
+#include <WiFi.h>
+#include <WebServer.h>
 
 #include "config.h"
 #include "functions.h"
@@ -35,6 +37,13 @@ void code0(void* pvParameters) {
   for (;;) {
     encoder.tick();        //update encoder
     encoderButton.tick();  //update encoder button
+
+    if (preferences.getBool("wifiActive", false)) {
+      server.handleClient();
+      webpageCheckActivity();
+    } else {
+      foggingActiveWeb = false;
+    }
 
     pageFunctions();
 

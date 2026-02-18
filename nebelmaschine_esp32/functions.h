@@ -11,6 +11,24 @@ void pump(bool active) {
   relay_pump = active;
 }
 
+void webpageHandleIndex() {
+  server.send_P(200, "text/html", webpage);
+}
+
+void webpageHandleButton() {
+  if (!server.hasArg("state")) {
+    server.send(400, "text/plain", "missing state");
+    return;
+  }
+  if (server.arg("state") == "1") {
+    foggingActiveWeb = true;
+    lastPing = millis();
+  } else {
+    foggingActiveWeb = false;
+  }
+  server.send(200, "text/plain", "ok");
+}
+
 //-------------setups--------------
 void initLibs() {
   u8g2.setI2CAddress(0x3C * 2);  //u8g2
@@ -28,6 +46,15 @@ void initLibs() {
   int personality_count = 1;
   dmx_driver_install(1, &config, personalities, personality_count);
   dmx_set_pin(1, dmxTX, dmxRX, dmxRTS);
+
+  if (preferences.getBool("wifiActive", false)) {
+    WiFi.softAP(AP_SSID, AP_PWD);
+    if (debugMode) Serial.print("IP:  ");
+    if (debugMode) Serial.println(WiFi.softAPIP());
+    server.on("/", webpageHandleIndex);
+    server.on("/button", webpageHandleButton);
+    server.begin();
+  }
 }
 
 void initPins() {
@@ -78,6 +105,7 @@ void checkTemp(bool wantsAction) {
   if (((now - lastTempUpdate) >= tempCheckInterval)) {
     lastTempUpdate = now;
     temperature = thermocouple.readCelsius();
+    Serial.println(temperature);
     if (wantsAction) {
       if (current_screen == 1 && (menu_selected == 7 || menu_selected == 3)) {
         action = true;
@@ -142,24 +170,25 @@ void systemControl() {
 
   if (now - lastTriggerButtonCheck >= 50) {
     lastTriggerButtonCheck = now;
-    if (!digitalRead(triggerButton)) { //button is inverted
+    if (!digitalRead(triggerButton)) {  //button is inverted
       foggingActiveButton = true;
-      if(debugMode)Serial.println("button activated");
+      if (debugMode) Serial.println("button activated");
     } else {
       foggingActiveButton = false;
     }
   }
-  
-  /*Serial.printf("dmx:%d | button:%d | display:%d | timer:%d | allowed:%d  |==> fogs:%d\n",  //troubleshooting help for trigger inputs
+
+  /*Serial.printf("dmx:%d | button:%d | display:%d | timer:%d | web:%d |allowed:%d  |==> fogs:%d\n",  //troubleshooting help for trigger inputs
                 foggingActiveDMX,
                 foggingActiveButton,
                 foggingActiveDisplay,
                 foggingActiveTimer,
+                foggingActiveWeb,
                 foggingAllowed,
                 foggingActive
   );*/
 
-  if ((foggingActiveDMX || foggingActiveButton || foggingActiveDisplay || foggingActiveTimer) && foggingAllowed) {
+  if ((foggingActiveDMX || foggingActiveButton || foggingActiveDisplay || foggingActiveTimer || foggingActiveWeb) && foggingAllowed) {
     foggingActive = true;
   } else {
     foggingActive = false;
@@ -282,4 +311,11 @@ void checkInactivity() {
 
 void dmxInPrefs() {
   dmxActive = preferences.getBool("dmxActive", true);
+}
+
+void webpageCheckActivity() {
+  if (foggingActiveWeb && millis() - lastPing > pingTimeout) {
+    foggingActiveWeb = false;
+    Serial.println("ping lost, foggingActiveWeb false");
+  }
 }

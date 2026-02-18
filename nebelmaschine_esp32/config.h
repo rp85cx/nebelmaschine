@@ -1,7 +1,7 @@
 //--------config-------------
 char menu_items[10][15] = {
   { "Manuell" },
-  { "soon Wifi" },
+  { "Wifi" },
   { "Timer" },
   { "Heat an/aus" },
   { "DMX Adresse" },
@@ -11,16 +11,20 @@ char menu_items[10][15] = {
   { "Help" }
 };
 
+const char* AP_SSID = "NeMaControl";  //wifi ap name und passwort für webpage control - am besten max. 15 chars
+const char* AP_PWD = "v3useResponsible";  //ich weiß dass das in github steht aber irgendwo solls auch zu finden sein falls jmd braucht :)
+
 const int inactivityTime = 120;     //in s; -120-       invert time = inactivity time * 5
 const int tempCheckInterval = 500;  //in ms >200; -500-
 const int dmxUpdateInterval = 100;  //in ms; -100-
-const int maxFoggingTime = 90;       //in s; -60-
+const int maxFoggingTime = 90;      //in s; -60-
+const int pingTimeout = 500;        //in ms >250; -500-    webpage timeout bis als false gesehen wird 
 
-const int led_dunkelPwm = 8;       //helligkeit von dunkler status led, 0-255; -20-
+const int led_dunkelPwm = 8;       //helligkeit von dunkler status led, 0-255; -8-
 
 const int foggingTimeOnDisplayPress = 500;  //wie lange (ms) foggen soll wenn in manuell page geklickt wurde -500-
 
-bool debugMode = true;            //serial feedback active oder nicht
+const bool debugMode = true;            //serial feedback active oder nicht
 
 //-------pin declarations-------- 
 const int relay_heatPin = 19;
@@ -52,7 +56,8 @@ U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0);
 RotaryEncoder encoder(encoderA, encoderB, RotaryEncoder::LatchMode::FOUR3);
 OneButton encoderButton(encoderButtonPin, true, false);
 Preferences preferences;
-MAX6675 thermocouple(thermocoupleCLK, thermocoupleCS, thermocoupleDO);//
+MAX6675 thermocouple(thermocoupleCLK, thermocoupleCS, thermocoupleDO);
+WebServer server(80);
 TaskHandle_t core0;
 TaskHandle_t core1;
 
@@ -74,6 +79,7 @@ unsigned long lastTimerUpdate;
 unsigned long lastTriggerButtonCheck;
 unsigned long lastHeatStateChange;
 unsigned long foggingTime;
+unsigned long lastPing;
 int lastLedControlState=6;;
 int ledControlState;
 bool buttonPressed = false;
@@ -96,6 +102,7 @@ bool foggingActiveDisplay = false;
 bool foggingActiveButton = false;
 bool foggingActiveDMX = false;
 bool foggingActiveTimer = false;
+bool foggingActiveWeb = false;
 bool foggingAllowed = true;
 bool displayInverted=false;
 bool lastFoggingState;

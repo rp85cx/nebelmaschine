@@ -82,3 +82,114 @@ static const unsigned char image_qr_code[] U8X8_PROGMEM = {
   0xff, 0x3f, 0x0f, 0x3f, 0xf0, 0x3f, 0xc0, 0x00, 0xff, 0x3f, 0x0f, 0x3f, 0xf0, 0x3f,
   0xc0, 0x00
 };
+
+const char webpage[] PROGMEM = R"rawliteral(
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nebelmaschine</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #1a1a1a;
+      color: #ddd;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      margin-bottom: 6px;
+    }
+
+    p {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 30px;
+    }
+
+    #status {
+      font-size: 14px;
+      margin-bottom: 24px;
+      color: #888;
+    }
+
+    #status.on {
+      color: #7fff00;
+    }
+
+    #btn {
+      display: inline-block;
+      padding: 18px 48px;
+      font-size: 18px;
+      background: #333;
+      color: #ccc;
+      border: 2px solid #555;
+      border-radius: 6px;
+      cursor: pointer;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #btn.held {
+      background: #2a3a00;
+      border-color: #7fff00;
+      color: #7fff00;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Nebelmaschine</h2>
+  <p>Taste drücken zum Nebeln</p>
+
+  <div id="status">● Bereit</div>
+
+  <div id="btn">Nebeln</div>
+
+  <script>
+    const btn    = document.getElementById('btn');
+    const status = document.getElementById('status');
+
+    let held  = false;
+    let timer = null;
+
+    function post(on) {
+      fetch('/button?state=' + (on ? '1' : '0')).catch(() => {});
+    }
+
+    function activate() {
+      if (held) return;
+      held = true;
+      btn.classList.add('held');
+      status.textContent = '● Aktiv';
+      status.classList.add('on');
+      post(true);
+      timer = setInterval(() => post(true), 200);
+    }
+
+    function release() {
+      if (!held) return;
+      held = false;
+      clearInterval(timer);
+      timer = null;
+      btn.classList.remove('held');
+      status.textContent = '● Bereit';
+      status.classList.remove('on');
+      post(false);
+    }
+
+    btn.addEventListener('mousedown',  activate);
+    btn.addEventListener('mouseup',    release);
+    btn.addEventListener('mouseleave', release);
+
+    btn.addEventListener('touchstart',  touchEvent => { touchEvent.preventDefault(); activate(); }, { passive: false });
+    btn.addEventListener('touchend',    touchEvent => { touchEvent.preventDefault(); release();  }, { passive: false });
+    btn.addEventListener('touchcancel', touchEvent => { touchEvent.preventDefault(); release();  }, { passive: false });
+  </script>
+
+</body>
+</html>
+)rawliteral"
+;

@@ -1,6 +1,6 @@
 #include "assets.h"
 
-//-------------------ui pages-------------------------------------
+//----ui helpers-----------
 void draw_switch(int x, int y, bool toggledOn) {
   if (toggledOn) {
     u8g2.drawRFrame(x + 0, y + 0, 32, 16, 4);
@@ -24,6 +24,23 @@ void draw_switch(int x, int y, bool toggledOn) {
   }
 }
 
+int getEncoderScroll(int changingValue, int maxNum, bool wantsAction) {
+  int encoderDirection = (int)(encoder.getDirection());
+  if (encoderDirection != 0) {
+    changingValue += encoderDirection;
+    if (changingValue < 0) {
+      changingValue = maxNum - 1;
+    }
+    if (changingValue >= maxNum) {
+      changingValue = 0;
+    }
+    if (wantsAction) action = true;
+    return changingValue;
+  }
+  return changingValue;
+}
+
+//-------------------ui pages-------------------------------------
 void page_manuell() {
   u8g2.setFont(u8g2_font_t0_18b_tr);
   u8g2.drawStr(33, 14, "Manuell");
@@ -40,9 +57,27 @@ void page_manuell() {
 }
 
 void page_wifi() {
+  u8g2.setFont(u8g2_font_t0_18b_tr);
+  u8g2.drawStr(46, 14, "Wifi");
+
   u8g2.setFont(u8g2_font_t0_16_tr);
-  u8g2.drawStr(6, 39, "kommt noch...");
-  //nach wifi chagen ESP.restart(); callen
+  u8g2.drawStr(9, 30, "Active:");
+
+  draw_switch(71, 17, preferences.getBool("wifiActive", false));
+
+  if (preferences.getBool("wifiActive", false)) {
+    u8g2.setFont(u8g2_font_t0_12_tr);
+    u8g2.drawStr(17, 46, "IP:");
+
+    u8g2.drawStr(38, 46, WiFi.softAPIP().toString().c_str());
+
+    u8g2.drawStr(5, 61, "SSID:");
+
+    u8g2.drawStr(38, 61, AP_SSID);
+  } else {
+    u8g2.setFont(u8g2_font_t0_14_tr);
+    u8g2.drawStr(8, 52, "Wifi deactivated");
+  }
 }
 
 void page_timer() {
@@ -299,22 +334,6 @@ void drawScreen() {
   u8g2.sendBuffer();
 }
 
-int getEncoderScroll(int changingValue, int maxNum, bool wantsAction) {
-  int encoderDirection = (int)(encoder.getDirection());
-  if (encoderDirection != 0) {
-    changingValue += encoderDirection;
-    if (changingValue < 0) {
-      changingValue = maxNum - 1;
-    }
-    if (changingValue >= maxNum) {
-      changingValue = 0;
-    }
-    if (wantsAction) action = true;
-    return changingValue;
-  }
-  return changingValue;
-}
-
 //------------make pages responsive---------
 void pageFunctions() {
   //--------------menu page functions-------
@@ -327,7 +346,7 @@ void pageFunctions() {
     });
   }
   //-----------page page functions-------------
-  if (current_screen == 1 && menu_selected == 0) {  //manuell page
+  if (current_screen == 1 && menu_selected == 0) {  //manuell page  TODO gescheites update von screen nach trigger oder externer Trigger
     unsigned long timeTrigger = millis();
 
     encoderButton.attachClick([]() {  //button function
@@ -344,6 +363,14 @@ void pageFunctions() {
       action = true;
     }
   } else if (current_screen == 1 && menu_selected == 1) {  //wifi page
+
+    encoderButton.attachClick([]() {  //button function
+      preferences.putBool("wifiActive", !preferences.getBool("wifiActive", false));
+      action = true;
+      delay(200); //crazy erstes delay haha
+      ESP.restart();
+    });
+
   } else if (current_screen == 1 && menu_selected == 2) {  //timer page
 
     encoderButton.attachClick([]() {  //button function
