@@ -1,3 +1,6 @@
+hw_timer_t *timer = NULL;
+volatile bool readTempNow = false;
+
 //--------config-------------
 char menu_items[10][15] = {
   { "Manuell" },
@@ -61,13 +64,13 @@ WebServer server(80);
 TaskHandle_t core0;
 TaskHandle_t core1;
 
-int menu_selected = 7;
-int current_screen = 1;
+volatile int menu_selected = 7;
+volatile int current_screen = 1;
 int lastMenu_selected;
 int lastCurrent_screen;
 int edit_selected = 0;
 bool editMode = false;
-bool action = true;
+volatile bool action = true;
 unsigned long lastAction = millis();
 unsigned long lastInvert = millis();
 unsigned long lastTempUpdate;
@@ -91,29 +94,29 @@ int calcDmxPPS = 0;
 bool timerState = false;
 int item_sel_next = 0;
 int item_sel_previous = 0;
-bool dmxIsConnected = false;
-int dmxValue = 0;
-bool ledState=false;
-bool ready = false;
-bool relay_heat = false;
-bool relay_pump = false;
-bool foggingActive = false;
-bool foggingActiveDisplay = false;
-bool foggingActiveButton = false;
-bool foggingActiveDMX = false;
-bool foggingActiveTimer = false;
-bool foggingActiveWeb = false;
-bool foggingAllowed = true;
+volatile bool dmxIsConnected = false;
+volatile int dmxValue = 0;
+volatile bool ledState=false;
+volatile bool ready = false;
+volatile bool relay_heat = false;
+volatile bool relay_pump = false;
+volatile bool foggingActive = false;
+volatile bool foggingActiveDisplay = false;
+volatile bool foggingActiveButton = false;
+volatile bool foggingActiveDMX = false;
+volatile bool foggingActiveTimer = false;
+volatile bool foggingActiveWeb = false;
+volatile bool foggingAllowed = true;
 bool displayInverted=false;
 bool lastFoggingState;
 //bool timerActive = false;   // -> preferences
 //int timerOff = 60;   // -> preferences
 //int timerOn = 30;   // -> preferences
 //bool heatActive = true;   // -> preferences
-int temperature = 0;  //dev: = 200 prod: = 0
+volatile int temperature = 0;  //dev: = 200 prod: = 0
 //int dmxAdress = 1;   // -> preferences
 //int dmxMode = 1;  // -> preferences
-bool dmxActive = true;  // -> preferences für core0, local var für core1
+volatile bool dmxActive = true;  // -> preferences für core0, local var für core1
 
 /*
 default core setup:

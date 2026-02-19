@@ -1,5 +1,5 @@
 /*
-v3.0
+v2.4
 Board library ESP32 by Espressif System <= 2.0.17 
 ich hoffe du verstehst denglisch
 
@@ -17,7 +17,6 @@ ich hoffe du verstehst denglisch
 #include "config.h"
 #include "functions.h"
 
-
 void setup() {
   if (debugMode) Serial.begin(115200);
 
@@ -25,36 +24,20 @@ void setup() {
   setInitalState();
   initLibs();
 
-  xTaskCreatePinnedToCore(code0, "core0", 10000, NULL, 1, &core0, 0);
-  delay(100);
+  xTaskCreatePinnedToCore(code0, "core0", 10000, NULL, 2, NULL, 0);
+  delay(200);
 
-  xTaskCreatePinnedToCore(code1, "core1", 10000, NULL, 1, &core1, 1);
-  delay(100);
+  xTaskCreatePinnedToCore(code1, "core1", 10000, NULL, 1, NULL, 1);
+  delay(200);
 }
 
 
 void code0(void* pvParameters) {
-  for (;;) {
+  while (true) {
     encoder.tick();        //update encoder
     encoderButton.tick();  //update encoder button
 
-    if (preferences.getBool("wifiActive", false)) {
-      server.handleClient();
-      webpageCheckActivity();
-    } else {
-      foggingActiveWeb = false;
-    }
-
-    pageFunctions();
-
     encoderMenuScroll();
-
-    if (action) {
-      action = false;
-
-      calcShownItems();
-      drawScreen();
-    }
 
     checkTemp(true);  //temperatur check im interval  -> true = action call nach temp read falls menu damit
 
@@ -65,13 +48,23 @@ void code0(void* pvParameters) {
     timerControl();
 
     dmxInPrefs();
+
+    if (action) {
+      action = false;
+
+      calcShownItems();
+      drawScreen();
+    }
+
+    pageFunctions();
   }
 }
 
 
 void code1(void* pvParameters) {
-  for (;;) {
+  while (true) {
     ledControl();
+
     dmxControl(true);
   }
 }

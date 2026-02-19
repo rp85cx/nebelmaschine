@@ -57,27 +57,8 @@ void page_manuell() {
 }
 
 void page_wifi() {
-  u8g2.setFont(u8g2_font_t0_18b_tr);
-  u8g2.drawStr(46, 14, "Wifi");
-
-  u8g2.setFont(u8g2_font_t0_16_tr);
-  u8g2.drawStr(9, 30, "Active:");
-
-  draw_switch(71, 17, preferences.getBool("wifiActive", false));
-
-  if (preferences.getBool("wifiActive", false)) {
     u8g2.setFont(u8g2_font_t0_12_tr);
-    u8g2.drawStr(17, 46, "IP:");
-
-    u8g2.drawStr(38, 46, WiFi.softAPIP().toString().c_str());
-
-    u8g2.drawStr(5, 61, "SSID:");
-
-    u8g2.drawStr(38, 61, AP_SSID);
-  } else {
-    u8g2.setFont(u8g2_font_t0_14_tr);
-    u8g2.drawStr(8, 52, "Wifi deactivated");
-  }
+    u8g2.drawStr(0,32, "wifi kommt noch...");
 }
 
 void page_timer() {
@@ -363,14 +344,6 @@ void pageFunctions() {
       action = true;
     }
   } else if (current_screen == 1 && menu_selected == 1) {  //wifi page
-
-    encoderButton.attachClick([]() {  //button function
-      preferences.putBool("wifiActive", !preferences.getBool("wifiActive", false));
-      action = true;
-      delay(200); //crazy erstes delay haha
-      ESP.restart();
-    });
-
   } else if (current_screen == 1 && menu_selected == 2) {  //timer page
 
     encoderButton.attachClick([]() {  //button function
