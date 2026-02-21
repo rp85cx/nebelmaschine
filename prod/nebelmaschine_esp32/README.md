@@ -1,2 +1,2 @@
 # Code für ESP32
-man braucht alle 4 Dateien, dabei ist die wie der Ordner genannte die main, auch wenn das meiste in functions.h passiert. old_uno kann eig gelöscht werden aber ich dacht ich lass es mal vollständigkeitshalber drinnen falls ich das in 3 Jahren mal wieder brauch
+man braucht alle 4 Dateien, dabei ist die wie der Ordner genannte die main

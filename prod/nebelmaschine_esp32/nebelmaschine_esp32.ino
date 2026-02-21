@@ -1,5 +1,5 @@
 /*
-v2.4
+v2.5
 Board library ESP32 by Espressif System <= 2.0.17 
 ich hoffe du verstehst denglisch
 
@@ -11,8 +11,6 @@ ich hoffe du verstehst denglisch
 #include <Preferences.h>
 #include <max6675.h>
 #include <esp_dmx.h>
-#include <WiFi.h>
-#include <WebServer.h>
 
 #include "config.h"
 #include "functions.h"

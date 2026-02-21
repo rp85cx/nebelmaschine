@@ -56,9 +56,20 @@ void page_manuell() {
   }
 }
 
-void page_wifi() {
-    u8g2.setFont(u8g2_font_t0_12_tr);
-    u8g2.drawStr(0,32, "wifi kommt noch...");
+void page_help() {
+  u8g2.drawXBMP(3, 3, 58, 58, image_qr_code);
+
+  u8g2.setFont(u8g2_font_t0_12_tr);
+  u8g2.drawStr(65, 10, "github.com");
+
+  u8g2.drawStr(72, 53, "press to");
+
+  u8g2.drawStr(75, 63, "restart");
+
+  u8g2.setFont(u8g2_font_t0_12b_tr);
+  u8g2.drawStr(75, 27, "made by");
+
+  u8g2.drawStr(84, 38, "Joni");
 }
 
 void page_timer() {
@@ -231,22 +242,6 @@ void page_home() {
   }
 }
 
-void page_help() {
-  u8g2.drawXBMP(3, 3, 58, 58, image_qr_code);
-
-  u8g2.setFont(u8g2_font_t0_12_tr);
-  u8g2.drawStr(65, 10, "github.com");
-
-  u8g2.drawStr(72, 53, "press to");
-
-  u8g2.drawStr(75, 63, "restart");
-
-  u8g2.setFont(u8g2_font_t0_12b_tr);
-  u8g2.drawStr(75, 27, "made by");
-
-  u8g2.drawStr(84, 38, "Joni");
-}
-
 void drawScreen() {
   u8g2.clearBuffer();
 
@@ -280,7 +275,7 @@ void drawScreen() {
         break;
 
       case 1:
-        page_wifi();
+        page_help();
         break;
 
       case 2:
@@ -305,10 +300,6 @@ void drawScreen() {
 
       case 7:
         page_home();
-        break;
-
-      case 8:
-        page_help();
         break;
     }
   }
@@ -343,7 +334,10 @@ void pageFunctions() {
       foggingActiveDisplay = false;
       action = true;
     }
-  } else if (current_screen == 1 && menu_selected == 1) {  //wifi page
+  } else if (current_screen == 1 && menu_selected == 1) {  //help page
+    encoderButton.attachClick([]() {                       //button function
+      ESP.restart();
+    });
   } else if (current_screen == 1 && menu_selected == 2) {  //timer page
 
     encoderButton.attachClick([]() {  //button function
@@ -390,10 +384,6 @@ void pageFunctions() {
     encoderButton.attachClick([]() {                       //button function
       current_screen = 0;
       action = true;
-    });
-  } else if (current_screen == 1 && menu_selected == 8) {  //help page
-    encoderButton.attachClick([]() {                       //button function
-      ESP.restart();
     });
   }
 }
