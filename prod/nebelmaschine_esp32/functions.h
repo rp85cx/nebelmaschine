@@ -79,7 +79,8 @@ void checkTemp(bool wantsAction) {
 
     temperature = thermocouple.readCelsius();
 
-    if(debugMode)if (temperature <= 5 || temperature > 1000) Serial.printf("temperature error: %d°C\n"), temperature;
+    if (debugMode)
+      if (temperature <= 5 || temperature > 1000) Serial.printf("temperature error: %d°C\n"), temperature;
 
     if (wantsAction) {
       if (current_screen == 1 && (menu_selected == 7 || menu_selected == 3)) {
@@ -189,7 +190,7 @@ void systemControl() {
 void dmxControl(bool wantsAction) {
   if (dmxActive) {
     dmx_packet_t packet;
-    if (dmx_receive(1, &packet, 10)) {
+    if (dmx_receive(1, &packet, DMX_TIMEOUT_TICK)) {
       if (!packet.err) {
         //dmx verfügbar:
         if (!dmxIsConnected) {
@@ -215,10 +216,10 @@ void dmxControl(bool wantsAction) {
           dmxValue = dmxData[preferences.getUInt("dmxAdress", 1)];
         }
 
-        if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1) == 1)) && dmxValue >= 127) {
+        if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1) == 1)) && dmxValue >= 127 && dmxValue <= 255) {
           foggingActiveDMX = true;
           action = true;
-        } else if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1)) == 2) && dmxValue >= 127) {
+        } else if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1)) == 2) && dmxValue >= 127 && dmxValue <= 255) {
           preferences.putBool("timerActive", true);
           action = true;
         } else if ((dmxIsConnected && (preferences.getUInt("dmxMode", 1)) == 2) && dmxValue < 127) {
@@ -227,16 +228,24 @@ void dmxControl(bool wantsAction) {
         } else {
           foggingActiveDMX = false;
         }
-      } else {
-        //dmx error
+        Serial.print("0");
+      } else {  //dmx error
         if (debugMode) Serial.println("dmx error occurred");
       }
+    } else {  //dmx not recieving
+      dmxPPS = 0;
+      dmxValue = 404;
+      foggingActiveDMX = false;
+      if (wantsAction) {  //only update screen when info that changed is actually shown
+        if (current_screen == 1 && (menu_selected == 4 || menu_selected == 6)) {
+          action = true;
+        }
+      }
     }
-  } else {
+  } else {  //dmx not activated
     foggingActiveDMX = false;
   }
 }
-
 void timerControl() {
   if (preferences.getBool("timerActive", false)) {
     unsigned long now = millis();

@@ -368,7 +368,7 @@ void pageFunctions() {
     });
   } else if (current_screen == 1 && menu_selected == 4) {  //dmx adress page
     edit_selected = 1;
-    preferences.putUInt("dmxAdress", getEncoderScroll(preferences.getUInt("dmxAdress", 1), 255, true));
+    preferences.putUInt("dmxAdress", getEncoderScroll(preferences.getUInt("dmxAdress", 1), 256, true));
   } else if (current_screen == 1 && menu_selected == 5) {  //dmx mode page
     encoderButton.attachClick([]() {                       //button function
       if (preferences.getUInt("dmxMode", 1) == 1) preferences.putUInt("dmxMode", 2);

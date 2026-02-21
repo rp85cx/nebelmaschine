@@ -27,6 +27,8 @@ void setup() {
 
   xTaskCreatePinnedToCore(code1, "core1", 10000, NULL, 1, NULL, 1);
   delay(200);
+
+  if (debugMode) Serial.println("initialised");
 }
 
 

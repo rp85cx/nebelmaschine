@@ -1,13 +1,13 @@
 //--------config-------------
-char menu_items[9][15] = {
-  { "Manuell" },
+char menu_items[8][15] = {
+  { "Manuell" },  //0
   { "Help" },
   { "Timer" },
   { "Heat an/aus" },
   { "DMX Adresse" },
   { "DMX Mode" },
   { "DMX Debug" },
-  { "Home" }
+  { "Home" }  //7
 };
 
 const int inactivityTime = 120;     //in s; -120-       invert time = inactivity time * 5
