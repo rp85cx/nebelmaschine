@@ -1,5 +1,5 @@
 /*
-v2.5
+v2.6
 Board library ESP32 by Espressif System <= 2.0.17 
 ich hoffe du verstehst denglisch
 

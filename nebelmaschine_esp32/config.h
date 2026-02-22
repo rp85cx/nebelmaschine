@@ -1,5 +1,5 @@
 //--------config-------------
-char menu_items[8][15] = {
+char menu_items[9][15] = {
   { "Manuell" },  //0
   { "Help" },
   { "Timer" },
