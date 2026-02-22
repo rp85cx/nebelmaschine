@@ -4,7 +4,7 @@
 >[!NOTE]
 > Disclaimer: der Code wurde basically komplett ohne KI geschrieben, wenn nur kleines problem solving deswegen bitte nicht wundern wenn der unstrukturiert oder unklar wie sonst noch was ist :)
 
-#### **How to use:**
+### How to use:
 
 Encoder unter dem Display drehen, klick für Action bzw in Menu gehen, langes Drücken um aus jeder Page zurück ins Menu zu kommen
 
