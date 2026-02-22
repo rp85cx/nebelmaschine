@@ -5,6 +5,7 @@ leider bis jetzt nur auf der Software Seite - keine Garantie für irgendwas
 
 > Disclaimer: der Code wurde basically komplett ohne KI geschrieben, wenn nur kleines problem solving deswegen bitte nicht wundern wenn der unstrukturiert oder unklar wie sonst noch was ist :)
 
+\n\n
 
 
 
