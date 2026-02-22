@@ -14,8 +14,8 @@ char menu_items[10][15] = {
   { "Help" }
 };
 
-const char* AP_SSID = "NeMaControl";  //wifi ap name und passwort für webpage control - am besten max. 15 chars
-const char* AP_PWD = "v3useResponsible";  //ich weiß dass das in github steht aber irgendwo solls auch zu finden sein falls jmd braucht :)
+const char* AP_SSID = "Nebelmaschine";  //wifi ap name und passwort für webpage control - am besten max. 15 chars
+const char* AP_PWD = "einPasswort";  //ich weiß dass das in github steht aber irgendwo solls auch zu finden sein falls jmd braucht :)
 
 const int inactivityTime = 120;     //in s; -120-       invert time = inactivity time * 5
 const int tempCheckInterval = 500;  //in ms >200; -500-
